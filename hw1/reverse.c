@@ -5,16 +5,12 @@ int main ( int argc, char * argv[] )
   FILE *file;
   char c;
 
-  if ( argc != 3) {
-    printf ("Usage: %s filename n \n", argv[0]);
+  if ( argc != 2) {
+    printf ("Usage: %s filename \n", argv[0]);
     return 1;
   }
 
   char * fileName = argv[1];
-  char * number = argv[2];
-
-  int n = atoi (number);
-
   file = fopen(fileName, "r");
 
   if (file==NULL){
@@ -22,18 +18,23 @@ int main ( int argc, char * argv[] )
       return 1;
   }
   else{
+    fseek(file, 0, SEEK_END);
+    int length = ftell(file);
+    rewind(file);
+    char fileChar[length];
+    int i = 0;
     do {
       c = getc (file);
-      if ( c == '\t'){
-        int i;
-        for ( i=0; i < n; i++ ) {
-          putc(' ', stdout);
-        }
-      }
-      if ( c != '\0' && c != '\t') {
-        putc(c, stdout);
-      }
+      fileChar[i] = c;
+      i ++;
     } while (c != EOF);
+
+    int j;
+    for (j=length-1; j >= 0; j --){
+      putc(fileChar[j], stdout);
+    }
+    printf("\n");
+
     fclose (file);
   }
   return 0;
