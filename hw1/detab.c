@@ -1,15 +1,13 @@
 #include <stdio.h>
 
-int main ( int argc, char * argv[] )
-{
-  FILE *file;
-  char c;
+int main ( int argc, char * argv[] ){
 
   if ( argc != 3) {
     printf ("Usage: %s filename n \n", argv[0]);
     return 1;
   }
 
+  FILE *file;
   char * fileName = argv[1];
   char * number = argv[2];
 
@@ -21,16 +19,17 @@ int main ( int argc, char * argv[] )
       printf ("Error reading file \n");
       return 1;
   }
-  else{
+  else{ // read file
+    char c;
     do {
       c = getc (file);
-      if ( c == '\t'){
+      if ( c == '\t'){ // replace tab with n spaces
         int i;
         for ( i=0; i < n; i++ ) {
           putc(' ', stdout);
         }
       }
-      if ( c != '\0' && c != '\t') {
+      if ( c != '\0' && c != '\t') { // print out a character
         putc(c, stdout);
       }
     } while (c != EOF);

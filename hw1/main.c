@@ -3,8 +3,6 @@
 #include "fsm.h"
 
 #define ACCEPT 2
-#define REJECT 3
-#define NUM_RULES 3
 
 int main ( int argc, char * argv[] ) {
 
@@ -29,13 +27,11 @@ int main ( int argc, char * argv[] ) {
   int i = 0, j, k;
   int temp[300][300];
 
-  while ( fgets(buf,1000, file )!=NULL ){
-    printf("%s",buf);
-
+  while ( fgets(buf,1000, file )!=NULL ){ //read file
     if ( strrchr (buf,',') > 0 ){
       states = strtok(buf, ",");
       j = 0;
-      while ( states != NULL){
+      while ( states != NULL){ // build fsm tables based on csv file
         temp[i][j] = atoi(states);
         states = strtok(NULL, ",");
         j ++;
@@ -55,9 +51,7 @@ int main ( int argc, char * argv[] ) {
 
   int m, n;
   for ( m = 0; m < i; m ++){
-
     for (n = 0; n < j; n ++){
-      printf ("m is %d, n is %d, state is %d \n", m, n, temp[m][n]);
       r[m][n] = temp[m][n];
     }
   }
@@ -74,11 +68,11 @@ int main ( int argc, char * argv[] ) {
   /* Check the input string */
   char * input = argv[2];
   int finalState = fsm(alphabet,numRules,r,input);
+  printf ("The final state of the FSM is %d \n", finalState);
+
   if ( finalState == ACCEPT ) {
     printf ( "accept\n");
   } else {
     printf ( "reject\n");
   }
-
-  printf ("The final state of the FSM is %d \n", finalState);
 }
