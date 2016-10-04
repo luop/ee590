@@ -26,6 +26,7 @@ int fsm ( char alphabet[], int num_rules, int rules[][num_rules], const char str
         // For recognize decimal number, digit is in the last row in my csv file
         j = 3;
       }else{
+        state = num_rules;
         break;
       }
     }

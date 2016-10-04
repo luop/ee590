@@ -2,8 +2,6 @@
 #include <string.h>
 #include "fsm.h"
 
-#define ACCEPT 2
-
 int main ( int argc, char * argv[] ) {
 
   if ( argc != 3) {
@@ -14,6 +12,9 @@ int main ( int argc, char * argv[] ) {
   FILE *file;
   char * fileName = argv[1];
   file = fopen(fileName, "r");
+
+  int line = 1;
+  int accept;
 
   if (file==NULL){
       printf ("Error reading file \n");
@@ -39,11 +40,17 @@ int main ( int argc, char * argv[] ) {
       i ++;
     }else{
       //Get input alphabet
-      for(k=0; buf[k]!='\0'; k ++){
-        alphabet[k]=buf[k];
+      if ( line == 1 ){
+        for(k=0; buf[k]!='\0'; k ++){
+          alphabet[k]=buf[k];
+        }
+        alphabet[k] = '\0';
       }
-      alphabet[k] = '\0';
+      if ( line == 2 ){
+        accept = atoi( buf );
+      }
     }
+    line ++;
   }
 
   int numRules = j;
@@ -68,9 +75,9 @@ int main ( int argc, char * argv[] ) {
   /* Check the input string */
   char * input = argv[2];
   int finalState = fsm(alphabet,numRules,r,input);
-  printf ("The final state of the FSM is %d \n", finalState);
+  //printf ("The final state of the FSM is %d \n", finalState);
 
-  if ( finalState == ACCEPT ) {
+  if ( finalState == accept ) {
     printf ( "accept\n");
   } else {
     printf ( "reject\n");
