@@ -21,14 +21,8 @@ int fsm ( char alphabet[], int num_rules, int rules[][num_rules], const char str
   for ( i=0; str[i] != '\0'; i++ ) {
     j =  indexOf(alphabet,str[i]);
     if ( j < 0 ){
-      // my decimal number fsm csv use "+-.#" for header
-      if ( isdigit(str[i]) && strcmp(alphabet, "+-.#") ){
-        // For recognize decimal number, digit is in the last row in my csv file
-        j = 3;
-      }else{
-        state = num_rules;
-        break;
-      }
+      state = num_rules;
+      break;
     }
     state = rules[j][state];
     if ( state >= num_rules )
