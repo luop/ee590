@@ -31,9 +31,10 @@ int main ( int argc, char * argv[] ){
     } while (c != EOF);
 
     int j;
-    // print the characters in reverse
-    for (j=length-1; j >= 0; j --){
-      putc(fileChar[j], stdout);
+    // print the characters in reverse order
+    // ignore EOF and \n
+    for (j=length-2; j >= 0; j --){
+        putc(fileChar[j], stdout);
     }
     printf("\n");
 

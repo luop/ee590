@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main ( int argc, char * argv[] ){
 
@@ -29,7 +30,7 @@ int main ( int argc, char * argv[] ){
           putc(' ', stdout);
         }
       }
-      if ( c != '\0' && c != '\t') { // print out a character
+      if ( c != '\t' && c != EOF ) { // print out a character
         putc(c, stdout);
       }
     } while (c != EOF);
