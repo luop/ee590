@@ -10,17 +10,19 @@ typedef struct {
 
 } Stack;
 
-Stack * stack_new ();
+Stack * stack_new ( Stack * s );
 
 void stack_destroy ( Stack * s );
 
-Stack * pop();
+Stack * pop( Stack * s );
 
-Stack * push();
+Stack * push( Stack * s );
 
-void print_top();
+int print_top( Stack * s );
 
-Stack * swap_top();
+Stack * swap_top( Stack * s );
+
+void stack_is_full ( Stack * s );
 
 /* utilities */
 #define ASSERT(_cond_) {                                                          \
