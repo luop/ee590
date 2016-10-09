@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include "stack.h"
@@ -6,7 +5,6 @@
 Stack * build_stack(char * filename) {
 
   FILE * file = fopen(filename, "r");
-  //ASSERT ( file != NULL );
 
   Stack * s = stack_create ();
 
@@ -21,7 +19,7 @@ Stack * build_stack(char * filename) {
     fseek(file, -i, SEEK_END);
     c = fgetc(file);
     //printf("char is %c", c);
-    if ( isdigit(c) ){
+    if ( c >= '0' && c <='9' ){
       //printf("int is %d\n", c - '0');
       push( s, c - '0' );
     }
@@ -33,41 +31,23 @@ Stack * build_stack(char * filename) {
 
 void wrtie_csv(Stack * s, char * filename){
 
-  FILE * file = fopen(filename, "r+");
+  FILE * file = fopen(filename, "w");
   //ASSERT ( file != NULL );
 
-  int write_offset = 0;
-  int read_offset = 0;
-  int i = s->size - 1;
-
-  char c = fgetc(file);
-
-  while ( c != EOF ){
-
-    printf("The char is %c\n", c);
-    read_offset = ftell( file );
-    fseek(file, write_offset, SEEK_SET);
-    if ( i < 0){
-      fputc(c, file);
-    }else{
-      if ( isdigit(c) ){
-        char temp = s->data[i];
-        printf("The i is %d\n", temp);
-        fputc(temp + '0', file);
-        i --;
-      }
-    }
-    write_offset = ftell( file );
-    fseek(file, read_offset, SEEK_SET);
-    c = fgetc(file);
+  int i;
+  for (i = s->size - 1; i >= 0; i --){
+    //printf("%d", s->data[i]);
+    fputc(s->data[i] + '0', file);
+    fputc('\n', file);
   }
+
   fclose(file);
 }
 
 void print_stack(Stack * s){
   int i;
   for (i = s->size - 1; i >= 0; i --){
-    printf("%d", s->data[i]);
+    printf("%d\n", s->data[i]);
   }
 }
 
@@ -90,7 +70,7 @@ int main( int argc, char * argv[] ) {
       stack_destroy ( s );
     }else if( strcmp("print_top", argv[2]) == 0 ){
       Stack * s = build_stack( argv[1] );
-      print_stack ( s );
+      //print_stack ( s );
       printf("%d\n", print_top( s ));
       stack_destroy ( s );
     }else if( strcmp("swap_top", argv[2]) == 0 ){
