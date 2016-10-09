@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "stack.h"
 
-Stack * stack_new ( ) {
+Stack * stack_create () {
 
   Stack * s = malloc( sizeof ( Stack ) );
   s->size = 0;
@@ -13,60 +13,42 @@ Stack * stack_new ( ) {
 
 }
 
-Stack * pop( Stack * s ){
+int pop( Stack * s ){
 
-Stack * new_stack = stack_new();
-new_stack->size = s->size - 1;
-
-int i;
-
-for (i = 0; i < new_stack->size; i ++){
-
-new_stack->data[i] = s-data[i+1];
+  ASSERT ( s->size > 0 );
+  s->size--;
+  return s->data[s->size];
 
 }
 
-stack_destroy ( s );
+void push( Stack * s, int value ){
 
-return new_stack;
+  stack_is_full(s);
 
-}
+  s->data[s->size] = value;
 
-Stack * push( Stack * s, int value ){
+  s->size++;
 
-int i;
-
-stack_is_full(s);
-
-for ( i = s->size; i > 0; i --){
-s->data[i] = s->data[i-1];
-}
-
-s-data[0] = value;
-
-s->size++;
-
-return s;
 }
 
 int print_top( Stack * s ){
 
-return s-data[0];
+  return s->data[s->size - 1];
 
 }
 
-Stack * swap_top( Stack * s ){
+void swap_top( Stack * s ){
 
-if ( s->size >= 2 ){
-int temp = s->data[1];
-int s->data[1] = s->data[0];
-int s->data[0] = temp;
+  if ( s->size >= 2 ){
+    int size = s->size;
+    int temp = s->data[size - 1];
+    s->data[size - 1] = s->data[size - 2];
+    s->data[size - 2] = temp;
+  }
+
 }
 
-return s;
-}
-
-void stack__is_full(Stack * s ) {
+void stack_is_full(Stack * s ) {
 
   if (s->size >= s->capacity) {
 

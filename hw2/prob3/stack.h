@@ -10,17 +10,17 @@ typedef struct {
 
 } Stack;
 
-Stack * stack_new ( Stack * s );
+Stack * stack_create ();
 
 void stack_destroy ( Stack * s );
 
-Stack * pop( Stack * s );
+int pop( Stack * s );
 
-Stack * push( Stack * s );
+void push( Stack * s, int data );
 
 int print_top( Stack * s );
 
-Stack * swap_top( Stack * s );
+void swap_top( Stack * s );
 
 void stack_is_full ( Stack * s );
 
