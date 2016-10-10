@@ -2,9 +2,10 @@
 #define _STACK_H
 
 #define STACK_INITIAL_CAPACITY 100
+#define STRING_SIZE 100
 
 typedef struct {
-  int * data;
+  char ** data;
   int size;
   int capacity;
 
@@ -14,11 +15,11 @@ Stack * stack_create ();
 
 void stack_destroy ( Stack * s );
 
-int pop( Stack * s );
+char * pop( Stack * s );
 
-void push( Stack * s, int data );
+void push( Stack * s, char * data );
 
-int print_top( Stack * s );
+char * print_top( Stack * s );
 
 void swap_top( Stack * s );
 

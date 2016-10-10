@@ -11,7 +11,7 @@ Stack * build_stack(char * filename) {
   char buf[100];
 
   while ( fgets(buf,1000, file )!=NULL ){
-    //printf("%s",buf);
+    printf("%s",buf);
     push( s, buf );
   }
 
@@ -67,7 +67,6 @@ int main( int argc, char * argv[] ) {
       stack_destroy ( s );
     }else if( strcmp("swap_top", argv[2]) == 0 ){
       Stack * s = build_stack( argv[1] );
-      //print_stack( s );
       swap_top( s );
       print_stack( s );
       wrtie_csv( s, argv[1] );

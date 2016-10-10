@@ -7,43 +7,52 @@ Stack * stack_create () {
   Stack * s = malloc( sizeof ( Stack ) );
   s->size = 0;
   s->capacity = STACK_INITIAL_CAPACITY;
-  s->data = malloc(sizeof(int) * s->capacity);
+  //s->data = malloc(sizeof(int) * s->capacity);
+  s->data = (char**)malloc(sizeof(char*) * s->capacity);
 
   return s;
 
 }
 
-int pop( Stack * s ){
+char * pop( Stack * s ){
 
   ASSERT ( s->size > 0 );
+
+  char * topop = s->data[0];
+  int i;
+  for (i = 0; i < s->size - 1; i ++){
+    s->data[i] = s->data[i + 1];
+  }
   s->size--;
-  return s->data[s->size];
+  return topop;
 
 }
 
-void push( Stack * s, int value ){
+void push( Stack * s, char * value ){
 
   stack_is_full(s);
 
-  s->data[s->size] = value;
+  //s->data[s->size] = value;
+  s->data[s->size] = (char*)malloc(STRING_SIZE * sizeof(char));
+  sprintf(s->data[s->size], value);
 
   s->size++;
 
 }
 
-int print_top( Stack * s ){
+char * print_top( Stack * s ){
 
-  return s->data[s->size - 1];
+  return s->data[0];
 
 }
 
 void swap_top( Stack * s ){
 
   if ( s->size >= 2 ){
-    int size = s->size;
-    int temp = s->data[size - 1];
-    s->data[size - 1] = s->data[size - 2];
-    s->data[size - 2] = temp;
+
+    char * temp = s->data[1];
+    s->data[1] = s->data[0];
+    s->data[0] = temp;
   }
 
 }
@@ -54,7 +63,7 @@ void stack_is_full(Stack * s ) {
 
     s->capacity *= 2;
 
-    s->data = realloc(s->data, sizeof(int) * s->capacity);
+    s->data = realloc(s->data, sizeof(char*) * s->capacity);
   }
 }
 
