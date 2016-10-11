@@ -21,11 +21,6 @@ int main ( int argc, char * argv[] ) {
 
   printf ( "det = %lf\n", matrix_det ( B ) );
 
-  C = matrix_from_file ( "data/m1.mat" );
-  matrix_print(C); NL;
-  printf ( "det = %lf\n", matrix_det ( C ) );
-  matrix_destroy(C);
-
   C = matrix_identity ( 3 );
   matrix_print(C); NL;
   matrix_destroy(C);
@@ -44,15 +39,28 @@ int main ( int argc, char * argv[] ) {
   D = matrix_power ( A, 2 );
   matrix_print(D); NL;
 
-  printf ("Are C and D equal? %d\n", matrix_equal ( C, D ));
+  printf ("Are they equal? %d\n", matrix_equal ( C, D ));
 
-  printf ("Are A and B equal? %d\n", matrix_equal ( A, B ));
+  printf ("Are they equal? %d\n", matrix_equal ( A, B ));
 
-  printf ("Are A and C equal? %d\n", matrix_equal ( A, C ));
+  printf ("Are they equal? %d\n", matrix_equal ( A, C ));
 
   matrix_destroy(C);
   matrix_destroy(D);
 
+  C = matrix_from_file ( "data/m1.mat" );
+  matrix_print(C); NL;
+  printf ( "det = %lf\n", matrix_det ( C ) );
+
+  D = matrix_cofactor (C);
+  matrix_print ( D ); NL;
+  matrix_destroy(D);
+
+  D = matrix_inverse ( C );
+  matrix_print ( D ); NL;
+  matrix_print ( matrix_mult ( C, D ) ); NL;
+  matrix_destroy(C);
+  matrix_destroy(D);
 
   return 0;
 

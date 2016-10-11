@@ -183,3 +183,68 @@ Matrix * matrix_power ( Matrix * M, int n ){
   }
 
 }
+
+// Problem 6
+double matrix_cofactor_element ( Matrix * M, int m, int n ){
+
+  Matrix * P = matrix_new ( M->rows-1, M->columns-1 );
+
+  int i, j, x = 0, y = 0;
+
+  for ( i=0; i<M->rows; i++ ) {
+    for ( j=0; j<M->columns; j++ ) {
+      if ( i != m && j != n){
+        matrix_set(P, x, y, matrix_get(M,i,j) );
+        y ++;
+      }
+    }
+    if ( y == (M->columns - 1) ){ // One P matrix row is filled up
+      x ++;
+    }
+    y = 0; // column index of P matrix starts at 0
+  }
+
+  double det = matrix_det ( P );
+
+  matrix_destroy ( P );
+
+  if( ( ( m + n ) % 2 ) == 0 || det == 0 ){
+    return det;
+  }else{
+    return (-1) * det;
+  }
+}
+
+Matrix * matrix_cofactor (Matrix * M){
+
+  Matrix * P = matrix_new ( M->rows, M->columns );
+
+  int i, j;
+
+  for ( i=0; i<M->rows; i++ ) {
+    for ( j=0; j<M->columns; j++ ) {
+      matrix_set(P, i, j, matrix_cofactor_element ( M, i, j ) );
+    }
+  }
+
+  return P;
+
+}
+
+Matrix * matrix_inverse ( Matrix * M ){
+
+  double det = matrix_det ( M );
+
+  ASSERT ( det > 0 || det < 0);
+
+  Matrix * P = matrix_cofactor ( M );
+
+  Matrix * Q = matrix_transpose ( P );
+
+  Matrix * N = matrix_scale ( Q, (1.0 / det) );
+
+  matrix_destroy ( P );
+  matrix_destroy ( Q );
+
+  return N;
+}

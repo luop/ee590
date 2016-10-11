@@ -25,12 +25,20 @@ Matrix * matrix_add ( Matrix * A, Matrix * B );
 Matrix * matrix_minor ( Matrix * M, int n );
 double matrix_det ( Matrix * M );
 
+// problem 5
 int matrix_equal ( Matrix * A, Matrix * B );      /* return 1 if A == B (element wise) and 0 otherwise */
 Matrix * matrix_identity ( int n );               /* return the nxn identity matrix */
 Matrix * matrix_scale ( Matrix * M, double s );   /* return s * M, multiplying each element of M by s */
 Matrix * matrix_transpose ( Matrix * M );         /* return the transpose of M */
 Matrix * matrix_mult ( Matrix * A, Matrix * B );  /* return A*B using matrix multiplication */
-Matrix * matrix_power ( Matrix * M, int n );      /* return M^n = M * M * ... * M (n times ) */
+Matrix * matrix_power ( Matrix * M, int n );      /* return M^n = M * M * ... * M (n times ) with n >=0*/
+
+// problem 6
+double matrix_cofactor_element ( Matrix * M, int m, int n );    /* returns each element of cofactor */
+Matrix * matrix_cofactor (Matrix * M);            /* returns the cofactor of M */
+
+Matrix * matrix_inverse ( Matrix * M );          /* returns the inverse of M */
+
 
 /* utilities */
 #define ASSERT(_cond_) {                                                          \
