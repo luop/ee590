@@ -32,7 +32,7 @@ void push( Stack * s, char * value ){
   stack_is_full(s);
 
   s->data[s->size] = (char*)malloc(STRING_SIZE * sizeof(char));
-  sprintf(s->data[s->size], value);
+  sprintf(s->data[s->size], "%s", value);
 
   s->size++;
 
