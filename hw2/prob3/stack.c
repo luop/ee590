@@ -7,7 +7,6 @@ Stack * stack_create () {
   Stack * s = malloc( sizeof ( Stack ) );
   s->size = 0;
   s->capacity = STACK_INITIAL_CAPACITY;
-  //s->data = malloc(sizeof(int) * s->capacity);
   s->data = (char**)malloc(sizeof(char*) * s->capacity);
 
   return s;
@@ -32,7 +31,6 @@ void push( Stack * s, char * value ){
 
   stack_is_full(s);
 
-  //s->data[s->size] = value;
   s->data[s->size] = (char*)malloc(STRING_SIZE * sizeof(char));
   sprintf(s->data[s->size], value);
 
@@ -42,6 +40,7 @@ void push( Stack * s, char * value ){
 
 char * print_top( Stack * s ){
 
+  ASSERT ( s->size > 0 );
   return s->data[0];
 
 }

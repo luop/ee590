@@ -1,17 +1,18 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 #include "stack.h"
 
 Stack * build_stack(char * filename) {
 
   FILE * file = fopen(filename, "r");
+  ASSERT ( file != NULL );
 
   Stack * s = stack_create ();
 
   char buf[100];
 
   while ( fgets(buf,1000, file )!=NULL ){
-    //printf("%s",buf);
+
     push( s, buf );
   }
 
@@ -23,13 +24,10 @@ Stack * build_stack(char * filename) {
 void wrtie_csv(Stack * s, char * filename){
 
   FILE * file = fopen(filename, "w");
-  //ASSERT ( file != NULL );
+  ASSERT ( file != NULL );
 
   int i;
   for (i = 0; i < s->size; i ++){
-    //printf("%d", s->data[i]);
-    //fputc(s->data[i] + '0', file);
-    //fputc('\n', file);
     fprintf(file, "%s", s->data[i]);
   }
 
@@ -60,20 +58,32 @@ int main( int argc, char * argv[] ) {
       printf("%s", pop( s ));
       wrtie_csv( s, argv[1] );
       stack_destroy ( s );
+
+      return 0;
+
     }else if( strcmp("print_top", argv[2]) == 0 ){
+
       Stack * s = build_stack( argv[1] );
-      //print_stack ( s );
       printf("%s", print_top( s ));
       stack_destroy ( s );
+
+      return 0;
+
     }else if( strcmp("swap_top", argv[2]) == 0 ){
+
       Stack * s = build_stack( argv[1] );
-      //print_stack( s );
       swap_top( s );
       print_stack( s );
       wrtie_csv( s, argv[1] );
       stack_destroy ( s );
+
+      return 0;
+
     }else{
+
       print_usage( argv[0] );
+
+      return 1;
     }
   }
 }
