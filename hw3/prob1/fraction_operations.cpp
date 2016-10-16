@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm>
+#include <math.h>
 #include "fraction.h"
 
 fraction fraction::ReduceToLowest () {
@@ -95,6 +95,10 @@ fraction fraction::divide ( const fraction &f ) const {
   int d = f.denom();
   bool p = f.posi();
 
+  if ( n == 0 ) {
+    throw fraction_exception("Denominator cannot be 0");
+  }
+
   if ( !p ) {
     d = (-1) * d;
   }
@@ -139,4 +143,35 @@ bool fraction::less_than ( const fraction &f ) const{
   }
 
   return smaller;
+}
+
+fraction fraction::power ( int power ) {
+
+  int n = numer();
+  int d = denom();
+  bool p = posi();
+
+  int np, dp;
+
+  if ( power == 0 ) {
+    np = 1;
+    dp = 1;
+  }
+  else if ( power > 0) {
+    np = pow(n, power);
+    dp = pow(d, power);
+  }else{
+    if ( n == 0 ) {
+      throw fraction_exception("Denominator cannot be 0");
+    }
+    power = abs(power);
+    dp = pow(n, power);
+    np = pow(d, power);
+  }
+
+  if ( !p && ( (power % 2) != 0 ) ){
+    dp = (-1) * dp;
+  }
+  fraction a(np, dp);
+  return a;
 }

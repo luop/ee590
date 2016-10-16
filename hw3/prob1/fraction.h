@@ -34,7 +34,7 @@ class fraction{
     fraction subtract ( const fraction &f ) const;
     fraction mult ( const fraction &f ) const;
     fraction divide ( const fraction &f ) const;
-    fraction power ( const fraction &f ) const;
+    fraction power ( int power );
     bool equals ( const fraction &f ) const;
     bool less_than ( const fraction &f ) const;
 

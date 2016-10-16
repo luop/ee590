@@ -8,7 +8,7 @@ fraction::fraction (int n, int d) : numerator(abs(n)), denominator(abs(d)){
     throw fraction_exception("Denominator cannot be 0");
   }
 
-  if ( (n > 0 && d > 0) || (n < 0 && d < 0) ){
+  if ( (n > 0 && d > 0) || (n < 0 && d < 0) || ( n == 0) ){
     positive = true;
   }else{
     positive = false;
