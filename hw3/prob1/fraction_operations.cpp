@@ -102,3 +102,41 @@ fraction fraction::divide ( const fraction &f ) const {
   fraction a(d, n);
   return mult(a);
 }
+
+bool fraction::equals ( const fraction &f ) const{
+
+  int n1 = numer();
+  int d1 = denom();
+  bool p1 = posi();
+
+  int n2 = f.numer();
+  int d2 = f.denom();
+  bool p2 = f.posi();
+
+  return ( ( ( n1 * d2 ) == ( n2 * d1 ) ) && (p1 == p2) );
+}
+
+bool fraction::less_than ( const fraction &f ) const{
+
+  int n1 = numer();
+  int d1 = denom();
+  bool p1 = posi();
+
+  int n2 = f.numer();
+  int d2 = f.denom();
+  bool p2 = f.posi();
+
+  bool smaller;
+
+  if ( !p1 && p2){
+    smaller = true;
+  }else if ( p1 && !p2){
+    smaller = false;
+  }else if ( p1 && p2 ){
+    smaller = ( n1 * d2 ) < ( n2 * d1 );
+  }else{
+    smaller = ( n1 * d2 ) > ( n2 * d1 );
+  }
+
+  return smaller;
+}
