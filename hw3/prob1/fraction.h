@@ -22,17 +22,18 @@ class fraction{
 
     // The copy constructor
     fraction( const fraction &f );
+    fraction& operator=(const fraction &other);
 
     inline int numer(void) const { return numerator; }
     inline int denom(void) const { return denominator; }
     inline bool posi(void) const { return positive; }
 
     // Operations
-    fraction ReduceToLowest ( const fraction &f ) const;
+    fraction ReduceToLowest ();
     fraction add ( const fraction &f ) const;
     fraction subtract ( const fraction &f ) const;
     fraction mult ( const fraction &f ) const;
-    fraction division ( const fraction &f ) const;
+    fraction divide ( const fraction &f ) const;
     fraction power ( const fraction &f ) const;
     bool equals ( const fraction &f ) const;
     bool less_than ( const fraction &f ) const;
@@ -42,7 +43,7 @@ class fraction{
     inline fraction operator+(const fraction &f) { return add(f); }
     inline fraction operator-(const fraction &f) { return subtract(f); }
     inline fraction operator*(const fraction &f) { return mult(f); }
-    inline fraction operator/(const fraction &f) { return division(f); }
+    inline fraction operator/(const fraction &f) { return divide(f); }
 
     // Overload '-', the unary minus operator to negate a fraction
     inline fraction operator-() { return fraction(numer(), (-1) * denom()); }

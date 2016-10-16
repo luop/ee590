@@ -1,6 +1,6 @@
 CXX = g++ -std=c++11 -O3
 
-SOURCES = fraction.cpp
+SOURCES = fraction.cpp fraction_operations.cpp
 HEADERS = fraction.h
 
 OBJECTS=$(SOURCES:.cpp=.o)
