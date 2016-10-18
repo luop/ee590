@@ -60,6 +60,10 @@ ComplexNum ComplexNum::divide ( const ComplexNum &c ) const {
   double r2 = c.realNum();
   double i2 = c.imagNum();
 
+  if ( r2 == 0 && i2 == 0 ){
+    throw ComplexNum_exception("Cannot divide 0");
+  }
+
   double r = (r1 * r2 + i1 * i2)/(pow(r2, 2) + pow(i2, 2));
   double i = (i1 * r2 - r1 * i2)/(pow(r2, 2) + pow(i2, 2));
 
