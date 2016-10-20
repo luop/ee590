@@ -65,11 +65,11 @@ T matrix<T>::det(void) {
 
   } else {
 
-    T sign = 1, sum = 0;
+    T sign = 1, sum = 0, negsign = -1;
 
     for ( int i=0; i<columns(); i++ ) {
-      sum += sign * (T) (get(0,i)) * (T) (minnor(0,i).det());
-      sign *= -1;
+      sum = sum + sign * (T) (get(0,i)) * (T) (minnor(0,i).det());
+      sign = sign * negsign;
     }
 
     return sum;

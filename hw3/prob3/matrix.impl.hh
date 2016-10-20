@@ -6,17 +6,23 @@ matrix<T>::matrix ( int r, int c ) : num_rows(r), num_columns(c) {
     throw matrix_exception("Attempted to initialize a matrix with non-positive number of rows and/or columns");
   }
 
-  value = new T[r*c];
+  //value = new T[r*c];
+  //T values [r*c];
+  value = (T *)malloc(r*c*sizeof(T));
 
-  for ( int i=0; i<r*c; i++ ) {
-    value[i] = (T) 0;
-  }
+  //for ( int i=0; i<r*c; i++ ) {
+    //value[i] = (T) 0;
+  //}
 
 }
 
 template <class T>
 matrix<T>::~matrix() {
-  delete []value;
+  //delete []value;
+  if (value){
+    free(value);
+    value = NULL;
+  }
 }
 
 template <class T>
@@ -26,7 +32,7 @@ matrix<T> matrix<T>::add ( const matrix &m ) const {
     throw matrix_exception("Attemped to add matrices with incompatible sizes");
   }
 
-  matrix<T> M(rows(),columns());
+  matrix M(rows(),columns());
 
   for ( int i=0; i<rows(); i++ ) {
     for ( int j=0; j<columns(); j++ ) {
