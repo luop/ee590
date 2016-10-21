@@ -88,8 +88,9 @@ matrix<T> matrix<T>::inverse ( void ) {
   }
 
   T d = det();
+  T zero = 0;
 
-  if ( d == 0 ) {
+  if ( d == zero ) {
     throw matrix_exception("Attempted to invert non-invertible matrix");
   }
 
