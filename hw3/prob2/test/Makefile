@@ -3,7 +3,7 @@ LIBS = -lm -lComplexNum
 INCLUDE_DIRS = -I..
 LIBDIRS = -L..
 
-SOURCES = 1.cpp 2.cpp 3.cpp 4.cpp
+SOURCES = 1.cpp 2.cpp
 TARGETS = $(SOURCES:%.cpp=%.x)
 
 all: $(TARGETS)

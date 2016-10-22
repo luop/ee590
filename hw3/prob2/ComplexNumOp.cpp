@@ -108,13 +108,19 @@ ComplexNum ComplexNum::power ( int p ) {
   double r = realNum();
   double i = imagNum();
 
-  ComplexNum t(r, i);
-  ComplexNum s = t;
-  for (int k = 0; k < p - 1; k ++ ){
-    t = t.mult(s);
+  if ( p == 0 ){
+    ComplexNum t = 1;
+    return t;
   }
+  else{
+    ComplexNum t(r, i);
+    ComplexNum s = t;
+    for (int k = 0; k < p - 1; k ++ ){
+      t = t.mult(s);
+    }
 
-  return t;
+    return t;
+  }
 }
 
 ComplexNum ComplexNum::expPower () {
