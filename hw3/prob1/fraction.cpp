@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& os, const fraction &f) {
   if (f.posi()){
     os << f.numer() << "/" << f.denom() << std::endl;
   }else{
-    os << "- (" << f.numer() << "/" << f.denom() << ")" << std::endl;
+    os << "-(" << f.numer() << "/" << f.denom() << ")" << std::endl;
   }
 
   return os;
