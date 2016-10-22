@@ -4,18 +4,71 @@
 
 int main ( int argc, char * argv[] ) {
 
-  matrix<bool> Q(2,2), P(2,2);
+  std::cout << std::endl;
+  matrix<bool> Q(2,2);
 
   Q.set(0,0,true); Q.set(0,1,false);
   Q.set(1,0,false); Q.set(1,1,true);
 
-  P.set(0,0,true); P.set(0,1,false);
-  P.set(1,0,true); P.set(1,1,false);
-
-  matrix<bool> M = Q.add(P);
-
+  // Test cout operator
+  std::cout << "The matrix Q is:" << std::endl;
   std::cout << std::boolalpha;
-  std::cout << std::endl << M << std::endl;
+  std::cout << std::endl << Q << std::endl;
+
+  // Test operations
+
+  /*Test 1
+    calculate determinant of matrix Q
+    verify determinant is not 0
+  */
+  bool d = Q.det();
+  bool zero = 0;
+  ASSERT(d != zero);
+
+  /*Test 2
+    calculate the inverse of matrix Q
+    multiply Q with its inverse
+    verify their multiplication equals to identity matrix
+  */
+  matrix<bool> P = Q.inverse();
+  matrix<bool> R = Q.mult(P);
+  matrix<bool> I = matrix<bool>::identity(2);
+  ASSERT(R == I);
+
+  /*Test 3
+    calculate Q plus Q
+    calculate Q * 2
+    verify the results are equal
+  */
+  matrix<bool> M = Q.add(Q);
+  Q.scale(2);
+  ASSERT(M == Q);
+
+  matrix<bool> A(3,3);
+
+  /*Test 4
+    add two incompatible sizes matrix
+    verify the exception is caught
+  */
+  try {
+     matrix<bool> D(3,4), E(4,5);
+     A = D.add(E);
+     FAIL;
+  } catch ( matrix_exception &e ) {
+    SUCCEED;
+  }
+
+  /*Test 5
+    multiply two matrix with num_rows != num_columns
+    verify the exception is caught
+  */
+  try {
+     matrix<bool> D(3,4), E(3,5);
+     A = D.mult(E);
+     FAIL;
+  } catch ( matrix_exception &e ) {
+    SUCCEED;
+  }
 
   return 0;
 

@@ -1,4 +1,34 @@
 template <class T>
+matrix<T> matrix<T>::identity ( int s ) {
+
+  matrix<T> m(s);
+
+  T one = 1;
+
+  for ( int i=0; i<s; i++ ) {
+    m.set(i,i,one);
+  }
+
+  return m;
+
+}
+
+template <class T>
+matrix<T>::matrix ( const matrix &m ) {
+
+  num_rows = m.num_rows;
+  num_columns = m.num_columns;
+  value = (T *)malloc(num_rows*num_columns*sizeof(T));
+
+  for ( int i=0; i<rows(); i++ ) {
+    for ( int j=0; j<columns(); j++ ) {
+      set(i,j,(T) (m.get(i,j)));
+    }
+  }
+
+}
+
+template <class T>
 matrix<T> matrix<T>::mult ( const matrix &m ) const {
 
   if ( columns() != m.rows() ) {

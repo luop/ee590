@@ -12,7 +12,12 @@ class matrix {
 public:
 
   matrix(int r, int c);
+  matrix(int s) : matrix(s,s) {};
   ~matrix();
+
+  static matrix identity( int s );
+  // The copy constructor
+  matrix ( const matrix &m );
 
   matrix add ( const matrix &m ) const;
   void set(int r, int c, T x);
@@ -28,6 +33,17 @@ public:
   matrix inverse ( void );
   bool equals ( const matrix & m ) const;
   bool less_than ( const matrix & m ) const;
+
+  inline matrix operator+(const matrix &m) { return add(m); }
+  inline matrix operator-(const matrix &m) { matrix temp = m; temp.scale(-1); return add(temp); }
+  inline matrix operator*(const matrix &m) { return mult(m); }
+  inline bool operator==(const matrix &m) { return equals(m); }
+  inline bool operator!=(const matrix &m) { return !equals(m); }
+
+  inline bool operator<(const matrix &m) { return less_than(m); }
+  inline bool operator>(const matrix &m) { return m.less_than(*this); }
+  inline bool operator<=(const matrix &m) { return less_than(m) || equals(m); }
+  inline bool operator>=(const matrix &m) { return m.less_than(*this) || m.equals(*this); }
 
 private:
   int num_rows, num_columns;
