@@ -105,21 +105,18 @@ double ComplexNum::angle () {
 
 ComplexNum ComplexNum::power ( int p ) {
 
-  double r = realNum();
-  double i = imagNum();
+  if ( p < 0 ){
 
-  if ( p == 0 ){
+    throw ComplexNum_exception("Power function only supports power >= 0");
+
+  } else if( p == 0 ){
+
     ComplexNum t = 1;
     return t;
   }
   else{
-    ComplexNum t(r, i);
-    ComplexNum s = t;
-    for (int k = 0; k < p - 1; k ++ ){
-      t = t.mult(s);
-    }
-
-    return t;
+    
+    return mult(power(p-1));
   }
 }
 
