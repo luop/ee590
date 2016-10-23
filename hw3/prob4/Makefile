@@ -8,14 +8,14 @@ OBJECTS=$(SOURCES:.cpp=.o)
 LIB_DFT=libDFT.a
 
 all: $(LIB_DFT)
-	#make -C test
+	make -C test
 
 $(LIB_DFT): $(OBJECTS) $(HEADERS)
-	ar cr $(LIB_DFT) $(OBJECTS) ../prob2/libComplexNum.a
+	ar cr $(LIB_DFT) $(OBJECTS) ../prob2/ComplexNum.o ../prob2/ComplexNumOp.o
 
 %.o: %.cpp $(HEADERS)
 	$(CXX) -c -I../prob3/ -I../prob2/ $<
 
 clean:
 	rm -f $(OBJECTS) $(LIB_DFT)
-	#make -C test clean
+	make -C test clean

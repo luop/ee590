@@ -35,7 +35,7 @@ matrix<T> matrix<T>::mult ( const matrix &m ) const {
     throw matrix_exception("Attemped to multiple matrices with incompatible sizes");
   }
 
-  matrix<T> M(rows(),columns());
+  matrix<T> M(rows(),m.columns());
 
   for ( int i=0; i<rows(); i++ ) {
     for ( int j=0; j<m.columns(); j++ ) {
@@ -133,6 +133,18 @@ matrix<T> matrix<T>::inverse ( void ) {
 
   return m;
 
+}
+
+template <class T>
+matrix<T> matrix<T>::power ( int p ) {
+
+  if ( p == 0 ){
+    matrix<T> t = matrix<T>::identity(num_rows);;
+    return t;
+  }
+  else{
+    return mult(power(p - 1));
+  }
 }
 
 template <class T>

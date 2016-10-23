@@ -14,9 +14,9 @@ public:
 class DFT{
   private :
     int numPoints;
-    matrix<ComplexNum> * dftMatrix;
-    matrix<ComplexNum> * unitary;
-    matrix<ComplexNum> * invUnitary;
+    matrix<ComplexNum> * dftMatrix = NULL;
+    matrix<ComplexNum> * unitary = NULL;
+    matrix<ComplexNum> * invDFT = NULL;
   public :
     // Constructors and destructors
     DFT(int n);
@@ -29,10 +29,11 @@ class DFT{
     inline int getNum(void) const { return numPoints; }
 
     // Operations
-    matrix<ComplexNum>& getDFTMatrix ();
-    matrix<ComplexNum> getUnitary ();
-    matrix<ComplexNum> getInvUnitary ();
-    matrix<ComplexNum> getOutSeq ( matrix<double> &inputSeq ) const;
+    matrix<ComplexNum> * getDFTMatrix ();
+    matrix<ComplexNum> * getUnitary ();
+    matrix<ComplexNum> * getInvDFT ();
+    matrix<ComplexNum> getDFTSeq ( const matrix<ComplexNum> &inputSeq ) const;
+    matrix<ComplexNum> getInvDFTSeq ( const matrix<ComplexNum> &inputSeq ) const;
 };
 
 #endif

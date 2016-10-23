@@ -47,9 +47,18 @@ int main ( int argc, char * argv[] ) {
   Q.scale(2);
   ASSERT(M == Q);
 
+  /*Test 4
+    calculate Q * Q
+    calculate Q ^ 2
+    verify the results are equal
+  */
+  matrix<fraction> N = Q.mult(Q);
+  matrix<fraction> O = Q.power(2);
+  ASSERT(N == O);
+
   matrix<fraction> A(3,3);
 
-  /*Test 4
+  /*Test 5
     add two incompatible sizes matrix
     verify the exception is caught
   */
@@ -61,7 +70,7 @@ int main ( int argc, char * argv[] ) {
     SUCCEED;
   }
 
-  /*Test 5
+  /*Test 6
     multiply two matrix with num_rows != num_columns
     verify the exception is caught
   */

@@ -33,6 +33,7 @@ public:
   matrix inverse ( void );
   bool equals ( const matrix & m ) const;
   bool less_than ( const matrix & m ) const;
+  matrix power ( int p );
 
   inline matrix operator+(const matrix &m) { return add(m); }
   inline matrix operator-(const matrix &m) { matrix temp = m; temp.scale(-1); return add(temp); }
