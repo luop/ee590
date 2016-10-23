@@ -25,10 +25,8 @@ DFT::DFT ( const DFT &d ) {
 
 matrix<ComplexNum> * DFT::getDFTMatrix (){
 
-  if (dftMatrix){
-    std::cout << "Matrix is not null" << std::endl;
-  }else{
-    std::cout << "Matrix is null" << std::endl;
+  if (! dftMatrix){
+
     dftMatrix = new matrix<ComplexNum>(numPoints, numPoints);
 
     ComplexNum A(0, ((-2) * PI)/numPoints);
@@ -44,10 +42,8 @@ matrix<ComplexNum> * DFT::getDFTMatrix (){
 
 matrix<ComplexNum> * DFT::getUnitary (){
 
-  if (dftMatrix && unitary){
-    std::cout << "Matrix is not null" << std::endl;
-  }else{
-    std::cout << "Matrix is null" << std::endl;
+  if (dftMatrix && ! unitary){
+
     unitary = new matrix<ComplexNum>(numPoints, numPoints);
     ComplexNum sq = 1/sqrt(numPoints);
 
@@ -62,10 +58,8 @@ matrix<ComplexNum> * DFT::getUnitary (){
 
 matrix<ComplexNum> * DFT::getInvDFT (){
 
-  if (invDFT){
-    std::cout << "Matrix is not null" << std::endl;
-  }else{
-    std::cout << "Matrix is null" << std::endl;
+  if (! invDFT){
+
     invDFT = new matrix<ComplexNum>(numPoints, numPoints);
 
     ComplexNum A(0, ((2) * PI)/numPoints);
