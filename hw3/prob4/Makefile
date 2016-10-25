@@ -14,8 +14,10 @@ $(LIB_DFT): $(OBJECTS) $(HEADERS)
 	ar cr $(LIB_DFT) $(OBJECTS) ../prob2/ComplexNum.o ../prob2/ComplexNumOp.o
 
 %.o: %.cpp $(HEADERS)
+	make -C ../prob2/
 	$(CXX) -c -I../prob3/ -I../prob2/ $<
 
 clean:
 	rm -f $(OBJECTS) $(LIB_DFT)
 	make -C test clean
+	make -C ../prob2/ clean
