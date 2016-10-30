@@ -1,6 +1,8 @@
 #include "hash.hh"
 #include "null.hh"
 #include "exception.hh"
+#include "string.hh"
+#include <iostream>
 
 Hash::Hash() {
 
@@ -42,14 +44,20 @@ Hash::Hash ( const Hash &hash ) {
 
   //hash.get("first");
 
-  std::vector<std::string> keys = hash.getKeys();
+  Array keys = hash.getKeys();
+
+  std::string s;
 
   Object * o;
 
-  for(std::vector<std::string>::iterator it = keys.begin(); it != keys.end(); ++it) {
+  for (int i = 0; i < hash.numKeys; i ++) {
 
-    o = hash.get((*it));
-    set((*it), (*o));
+    s = keys.get(i)->stringify();
+    s.replace(0, 1, "");
+    s.replace(s.length() - 1, 1, "");
+    std::cout << s << std::endl;
+    o = hash.get(s);
+    set(s, (*o));
 
   }
 
@@ -81,6 +89,8 @@ void Hash::set ( std::string key, Object &value ) {
     ptr->value = value.clone();
     ptr->next = shelves[i];
     shelves[i] = ptr;
+
+    numKeys ++;
   }
 
 }
@@ -121,7 +131,7 @@ std::string Hash::stringify() {
   for ( int i=0; i<num_shelves; i++ ) {
     Bucket * ptr = shelves[i];
     while ( ptr != NULL ) {
-      s += ptr->key + ":" + ptr->value->stringify() + ",";
+      s += "\"" + ptr->key + "\":" + ptr->value->stringify() + ",";
       ptr = ptr->next;
     }
   }
@@ -136,17 +146,22 @@ std::string Hash::stringify() {
 
 }
 
-std::vector<std::string> Hash::getKeys() const{
+Array Hash::getKeys() const{
 
-  std::vector<std::string> keys;
-
+  Array keys;
+  String s("");
   Bucket * ptr;
+
+  int index = 0;
 
   for ( int i=0; i<num_shelves; i++ ) {
     ptr = shelves[i];
     while ( ptr != NULL ) {
-      keys.push_back(ptr->key);
+      std::cout << ptr->key << std::endl;
+      s.set(ptr->key);
+      keys.set(index,s);
       ptr = ptr->next;
+      index ++;
     }
   }
 

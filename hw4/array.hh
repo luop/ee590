@@ -1,3 +1,6 @@
+#ifndef _ARRAY_H_
+#define _ARRAY_H_
+
 #include "object.hh"
 
 class Array : public Object {
@@ -22,3 +25,5 @@ private:
   Object ** values;
 
 };
+
+#endif

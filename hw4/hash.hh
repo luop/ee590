@@ -1,5 +1,5 @@
-#include <vector>
 #include "object.hh"
+#include "array.hh"
 
 typedef struct _Bucket {
   std::string key;
@@ -23,12 +23,13 @@ public:
   Object * get ( std::string key ) const;
   std::string stringify();
 
-  std::vector<std::string> getKeys() const;
+  Array getKeys() const;
 
 private:
 
   int hash ( std::string s ) const;
   static const int num_shelves = 256;
   Bucket * shelves[num_shelves];
+  int numKeys = 0;
 
 };
