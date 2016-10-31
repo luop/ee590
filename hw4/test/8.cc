@@ -47,6 +47,42 @@ int main ( int argc, char * argv[] ) {
 
   std::cout << h1.stringify() << std::endl;
 
+  std::cout << std::boolalpha;
+
+  std::string test;
+  test = h1.get("ee590")->stringify();
+  std::cout << std::endl << (test == "\"is fun\"") << std::endl;
+
+  test = h1.get("C++")->get(0)->stringify();
+  std::cout << std::endl << (test == "\"is\"") << std::endl;
+
+  test = h1.get("C++")->get(1)->get("adjective")->stringify();
+  std::cout << std::endl << (test == "\"arcane\"") << std::endl;
+
+  test = h1.get("Ruby")->get("used by")->stringify();
+  std::cout << std::endl << (test == "\"hipsters\"") << std::endl;
+
+  test = h1.get("Ruby")->get("poetic")->stringify();
+  std::cout << std::endl << (test == "true") << std::endl;
+
+  test = h1.get("Java")->get(0)->stringify();
+  std::cout << std::endl << (test == "\"JavaHomeworkAssignmentTestCodeLibraryAssessorFuncTest\"") << std::endl;
+
+  test = h1.get("Java")->get(1)->stringify();
+  std::cout << std::endl << (std::stoi( test ) == 0) << std::endl;
+
+  test = h1.get("Java")->get(2)->stringify();
+  std::cout << std::endl << (test == "null") << std::endl;
+
+  test = h1.get("Java")->get(3)->stringify();
+  std::cout << std::endl << (test == "\"zero\"") << std::endl;
+
+  test = h1.get("Java")->get(4)->stringify();
+  std::cout << std::endl << (test == "{}") << std::endl;
+
+  test = h1.get("Javascript")->stringify();
+  std::cout << std::endl << (test == "\"Resistance is futile\"") << std::endl;
+
   return 0;
 
 }
