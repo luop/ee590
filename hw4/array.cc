@@ -30,7 +30,10 @@ Array::Array ( const Array &array ) {
   max = array.max;
   values = new Object *[max];
   for ( int i=0; i < max; i++ ) {
-    values[i] = array.values[i];
+    values[i] = NULL;
+    if ( array.values[i] ){
+      values[i] = array.values[i]->clone();
+    }
   }
 
 }
@@ -38,6 +41,9 @@ Array::Array ( const Array &array ) {
 void Array::set(int index, Object &object) {
 
   if (index < max){
+    if ( values[index] ){
+      delete values[index];
+    }
     values[index] = object.clone();
   }else{
     int new_max = index + 1;
