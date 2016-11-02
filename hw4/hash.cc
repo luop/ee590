@@ -37,13 +37,6 @@ Hash::Hash ( const Hash &hash ) {
     shelves[i] = NULL;
   }
 
-  // TODO: method keys() that returns an Array of keys
-  //           for ( k in keys() ) {
-  //             set(k,hash.get(k))
-  //           }
-
-  //hash.get("first");
-
   Array keys = hash.getKeys();
 
   std::string s;
@@ -55,8 +48,7 @@ Hash::Hash ( const Hash &hash ) {
     s = keys.get(i)->stringify();
     s.replace(0, 1, "");
     s.replace(s.length() - 1, 1, "");
-    std::cout << s << std::endl;
-    o = hash.get(s);
+    o = hash.get(s)->clone();
     set(s, (*o));
 
   }
@@ -65,9 +57,6 @@ Hash::Hash ( const Hash &hash ) {
 }
 
 void Hash::set ( std::string key, Object &value ) {
-
-  // TODO: Homework: Use delete if key exists to avoid duplicate keys
-  //       or reset the value in place (make sure to delete old value!)
 
   int i = hash(key);
 
@@ -79,8 +68,10 @@ void Hash::set ( std::string key, Object &value ) {
 
   if ( ptr_current ) { // find duplicate keys
     if (ptr_current->value){
+      //delete old value
       delete (ptr_current->value);
     }
+    //reset the value in place
     ptr_current->value = value.clone();
   } else {
     Bucket * ptr = new Bucket;
@@ -157,7 +148,6 @@ Array Hash::getKeys() const{
   for ( int i=0; i<num_shelves; i++ ) {
     ptr = shelves[i];
     while ( ptr != NULL ) {
-      std::cout << ptr->key << std::endl;
       s.set(ptr->key);
       keys.set(index,s);
       ptr = ptr->next;

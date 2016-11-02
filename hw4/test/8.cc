@@ -3,6 +3,9 @@
 
 int main ( int argc, char * argv[] ) {
 
+  // Test item 8
+  
+  // Construct example JSON
   Hash h1;
   Hash h2;
   Hash h3;
@@ -45,10 +48,13 @@ int main ( int argc, char * argv[] ) {
   s.set("Resistance is futile");
   h1.set("Javascript", s);
 
+  // Print out the example JSON
   std::cout << h1.stringify() << std::endl;
 
   std::cout << std::boolalpha;
 
+  // Verify each object is configured properly
+  // Print out true it is correctly configured
   std::string test;
   test = h1.get("ee590")->stringify();
   std::cout << std::endl << (test == "\"is fun\"") << std::endl;

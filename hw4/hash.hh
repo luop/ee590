@@ -23,6 +23,7 @@ public:
   Object * get ( std::string key ) const;
   std::string stringify();
 
+  // return an array of keys
   Array getKeys() const;
 
 private:

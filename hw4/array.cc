@@ -54,7 +54,7 @@ void Array::set(int index, Object &object) {
       }else if (i == index) {
         new_values[i] = object.clone();
       }else{
-        new_values[i] = new Null();
+        new_values[i] = NULL;
       }
     }
     delete[] values;
