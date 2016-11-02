@@ -47,14 +47,14 @@ void Array::set(int index, Object &object) {
     values[index] = object.clone();
   }else{
     int new_max = index + 1;
-    Object ** new_values = new Object *[max];
+    Object ** new_values = new Object *[new_max];
     for ( int i=0; i < new_max; i++ ) {
       if (i < max){
         new_values[i] = values[i];
       }else if (i == index) {
         new_values[i] = object.clone();
       }else{
-        new_values[i] = NULL;
+        new_values[i] = new Null();
       }
     }
     delete[] values;

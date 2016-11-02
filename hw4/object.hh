@@ -11,7 +11,7 @@ public:
 
   Object();
   Object ( const Object &m ) {}
-  ~Object();
+  virtual ~Object();
 
   virtual Object * clone() = 0;
   virtual std::string stringify() = 0;
