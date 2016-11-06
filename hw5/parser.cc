@@ -63,8 +63,9 @@ Object * Parser::hash ( void ) {
 }
 
 Object * Parser::number ( void ) {
-  Number * n = new Number(tok.current().number_val());
-  tok.eat();
+  //Number * n = new Number(tok.current().number_val());
+  //tok.eat();
+  Number * n = new Number( expression() );
   return n;
 }
 
@@ -97,6 +98,12 @@ Object * Parser::object ( void ) {
     return hash();
   } else if ( tok.current().matches('[') ) {
     return array();
+  } else if ( tok.current().matches('(') ) {
+    return number();
+  } else if ( tok.current().matches('+') ) {
+    return number();
+  } else if ( tok.current().matches('-') ) {
+    return number();
   } else if ( tok.current().is_number() ) {
     return number();
   } else if ( tok.current().is_exponents() ) {
@@ -113,4 +120,68 @@ Object * Parser::object ( void ) {
     throw ParserException(s.c_str());
   }
 
+}
+
+double Parser::factor() {
+  if ( tok.current().is_number() ) {
+      double num = tok.current().number_val();
+      tok.eat();
+      return num;
+  } else if ( tok.current().matches('(') ) {
+      tok.eat_punctuation('(');
+      double num = expression();
+      tok.eat_punctuation(')');
+      return num;
+  } else {
+      throw ParserException("factor: syntax error");
+      //nextsym();
+  }
+}
+
+double Parser::expression() {
+
+  double num;
+
+  if ( tok.current().matches('+') ){
+    tok.eat_punctuation('+');
+    num = term();
+  }else if ( tok.current().matches('-') ){
+    tok.eat_punctuation('-');
+    num = (-1) * term();
+  }else{
+    num = term();
+  }
+
+  while ( tok.current().matches('+') || tok.current().matches('-') ) {
+    if ( tok.current().matches('+') ){
+      tok.eat_punctuation('+');
+      num = num + term();
+    }
+
+    if ( tok.current().matches('-') ){
+      tok.eat_punctuation('-');
+      num = num - term();
+    }
+  }
+
+  return num;
+}
+
+double Parser::term() {
+
+  double num = factor();
+
+  while ( tok.current().matches('*') || tok.current().matches('/') ) {
+    if ( tok.current().matches('*') ){
+      tok.eat_punctuation('*');
+      num = num * term();
+    }
+
+    if ( tok.current().matches('/') ){
+      tok.eat_punctuation('/');
+      num = num / term();
+    }
+  }
+
+  return num;
 }

@@ -1,13 +1,6 @@
 {
-  "first": 0,
-  "second": [ 0,1,2 ],
-  "third": {
-    "a": 1,
-    "b": [ 2 ],
-    "c": {
-      "x": true,
-      "y": [ 0, null, false ]
-    }
-  },
-  "fourth": [ 1, 0.1, 10., .010 ]
+  "first": 1.5 - 1 * ( 2 + 3 ) / 2.0,
+  "second": -5 % 2,
+  "third": 2 * 10e3,
+  "fourth": [ "normal", "json", "still", "works" ]
 }

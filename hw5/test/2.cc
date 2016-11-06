@@ -6,7 +6,7 @@
 int main ( int argc, char * argv[] ) {
 
   std::ifstream inFile;
-  inFile.open("data3.json");//open the input file
+  inFile.open("data.json");//open the input file
 
   std::stringstream strStream;
   strStream << inFile.rdbuf();//read the file
