@@ -141,6 +141,13 @@ Token Tokenizer::next() {
   case ']':
   case ':':
   case ',':
+  case '(':
+  case ')':
+  case '+':
+  case '-':
+  case '*':
+  case '/':
+  case '%':
     return Token(buffer[i++]);
   case '"':
     return string();
