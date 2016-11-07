@@ -27,9 +27,9 @@ public:
 private:
 
   Tokenizer tok;
-  double factor();
-  double expression();
-  double term();
+  Number * factor();
+  Number * expression();
+  Number * term();
 
 };
 

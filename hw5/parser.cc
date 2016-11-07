@@ -63,9 +63,9 @@ Object * Parser::hash ( void ) {
 }
 
 Object * Parser::number ( void ) {
-  //Number * n = new Number(tok.current().number_val());
-  //tok.eat();
-  Number * n = new Number( expression() );
+  Number * n = new Number(tok.current().number_val());
+  tok.eat();
+  //Number * n = new Number( expression() );
   return n;
 }
 
@@ -99,15 +99,15 @@ Object * Parser::object ( void ) {
   } else if ( tok.current().matches('[') ) {
     return array();
   } else if ( tok.current().matches('(') ) {
-    return number();
+    return expression();
   } else if ( tok.current().matches('+') ) {
-    return number();
+    return expression();
   } else if ( tok.current().matches('-') ) {
-    return number();
+    return expression();
   } else if ( tok.current().is_number() ) {
-    return number();
+    return expression();
   } else if ( tok.current().is_exponents() ) {
-    return exponents();
+    return expression();
   } else if ( tok.current().is_null() ) {
     return null();
   } else if ( tok.current().is_bool() ) {
@@ -122,70 +122,112 @@ Object * Parser::object ( void ) {
 
 }
 
-double Parser::factor() {
-  if ( tok.current().is_number() ) {
+Number * Parser::factor() {
+  if ( tok.current().is_number() || tok.current().is_exponents() ) {
       double num = tok.current().number_val();
+      double exponents = tok.current().exponents_val();
       tok.eat();
-      return num;
+      Number * n = new Number( num, exponents );
+      return n;
   } else if ( tok.current().matches('(') ) {
       tok.eat_punctuation('(');
-      double num = expression();
+      Number * o = expression();
+      double num = o->get_val();
+      double exponents = o->get_exp();
+      delete o;
       tok.eat_punctuation(')');
-      return num;
+      Number * n = new Number( num, exponents );
+      return n;
   } else {
       throw ParserException("factor: syntax error");
       //nextsym();
   }
 }
 
-double Parser::expression() {
+Number * Parser::expression() {
 
   double num;
+  double exponents;
+
+  Number * o;
 
   if ( tok.current().matches('+') ){
     tok.eat_punctuation('+');
-    num = term();
+    o = term();
+    num = o->get_val();
+    exponents = o->get_exp();
+    delete o;
   }else if ( tok.current().matches('-') ){
     tok.eat_punctuation('-');
-    num = (-1) * term();
+    o = term();
+    num = (-1) * (o->get_val());
+    exponents = o->get_exp();
+    delete o;
   }else{
-    num = term();
+    o = term();
+    num = o->get_val();
+    exponents = o->get_exp();
+    delete o;
   }
 
   while ( tok.current().matches('+') || tok.current().matches('-') ) {
     if ( tok.current().matches('+') ){
       tok.eat_punctuation('+');
-      num = num + term();
+      o = term();
+      num = num + (o->get_val());
+      exponents = o->get_exp();
+      delete o;
     }
 
     if ( tok.current().matches('-') ){
       tok.eat_punctuation('-');
-      num = num - term();
+      o = term();
+      num = num - (o->get_val());
+      exponents = o->get_exp();
+      delete o;
     }
   }
 
-  return num;
+  Number * n = new Number( num, exponents );
+  return n;
 }
 
-double Parser::term() {
+Number * Parser::term() {
 
-  double num = factor();
+  Number * o = factor();
+  double num = o->get_val();
+  double exponents = o->get_exp();
+  delete o;
 
   while ( tok.current().matches('*') || tok.current().matches('/') || tok.current().matches('%') ) {
     if ( tok.current().matches('*') ){
       tok.eat_punctuation('*');
-      num = num * term();
+      o = factor();
+      num = num * (o->get_val());
+      exponents = o->get_exp();
+      delete o;
     }
 
     if ( tok.current().matches('/') ){
       tok.eat_punctuation('/');
-      num = num / term();
+      o = factor();
+      double t = o->get_val();
+      if ( t != 0 ){
+        num = num / t;
+      }else{
+        throw ParserException("invalid operands to divide by 0");
+      }
+      exponents = o->get_exp();
+      delete o;
     }
 
     if ( tok.current().matches('%') && (num - (int) num == 0) ){
       tok.eat_punctuation('%');
-      double t = term();
-      if ( (t - (int) t == 0) ){
+      o = factor();
+      double t = o->get_val();
+      exponents = o->get_exp();
+      delete o;
+      if ( (t - (int) t == 0) && t != 0){
         num = ( (int) num ) %  ( (int) t );
       }else{
         throw ParserException("invalid operands to binary 'operator%'");
@@ -197,5 +239,6 @@ double Parser::term() {
     }
   }
 
-  return num;
+  Number * n = new Number( num, exponents );
+  return n;
 }

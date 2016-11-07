@@ -15,7 +15,7 @@ std::string Number::stringify() {
   }
 
   if ( exponents != 0 ){
-      s = s + "E" + std::to_string(exponents);
+      s = s + "E" + std::to_string((int)exponents);
   }
   return s;
 }

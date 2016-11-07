@@ -11,6 +11,10 @@ int main ( int argc, char * argv[] ) {
 
   std::cout << m.object()->stringify() << std::endl;
 
+  Parser n("[2*10e3]");
+
+  std::cout << n.object()->stringify() << std::endl;
+
   try {
     Parser q("[(1+1]");
     std::cout << q.object()->stringify() << std::endl;
@@ -20,6 +24,20 @@ int main ( int argc, char * argv[] ) {
 
   try {
     Parser q("[(1+)1]");
+    std::cout << q.object()->stringify() << std::endl;
+  } catch ( ParserException &e ) {
+    std::cerr << e.what() << std::endl;
+  }
+
+  try {
+    Parser q("[5/0]");
+    std::cout << q.object()->stringify() << std::endl;
+  } catch ( ParserException &e ) {
+    std::cerr << e.what() << std::endl;
+  }
+
+  try {
+    Parser q("[5%0]");
     std::cout << q.object()->stringify() << std::endl;
   } catch ( ParserException &e ) {
     std::cerr << e.what() << std::endl;
@@ -45,6 +63,6 @@ int main ( int argc, char * argv[] ) {
   } catch ( ParserException &e ) {
     std::cerr << e.what() << std::endl;
   }
-  return 0;
 
+  return 0;
 }
