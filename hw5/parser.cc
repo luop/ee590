@@ -171,7 +171,7 @@ double Parser::term() {
 
   double num = factor();
 
-  while ( tok.current().matches('*') || tok.current().matches('/') ) {
+  while ( tok.current().matches('*') || tok.current().matches('/') || tok.current().matches('%') ) {
     if ( tok.current().matches('*') ){
       tok.eat_punctuation('*');
       num = num * term();
@@ -180,6 +180,20 @@ double Parser::term() {
     if ( tok.current().matches('/') ){
       tok.eat_punctuation('/');
       num = num / term();
+    }
+
+    if ( tok.current().matches('%') && (num - (int) num == 0) ){
+      tok.eat_punctuation('%');
+      double t = term();
+      if ( (t - (int) t == 0) ){
+        num = ( (int) num ) %  ( (int) t );
+      }else{
+        throw ParserException("invalid operands to binary 'operator%'");
+      }
+    }
+
+    if ( tok.current().matches('%') && (num - (int) num != 0) ){
+      throw ParserException("invalid operands to binary 'operator%'");
     }
   }
 
