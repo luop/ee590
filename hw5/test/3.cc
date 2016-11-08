@@ -7,11 +7,11 @@ int main ( int argc, char * argv[] ) {
 
   std::cout << p.object()->stringify() << std::endl;
 
-  Parser m("[1%1,1+1%1,11-2%2,(12+2)%(12-2),13-(2+1)%3,14+1-2*2+2%2,(15%5)-2,-(16%2)]");
+  Parser m("[1%1,1+1%1,11-2%2,(12+2)%(12-2),13-(2+1)%3,14+1-2*2+2%2,(15%5)-2,-5%2,(-5)%2,-(5%2)]");
 
   std::cout << m.object()->stringify() << std::endl;
 
-  Parser n("[2*10e3]");
+  Parser n("[2*10e3,2E3*3E2,2E3*3E-2,2E3/3E2,2E3/3E-2,2E3+3E2,2E3-3E2,3E2+2E3,3E2-2E3,3E3+2E3,3E3-2E3]");
 
   std::cout << n.object()->stringify() << std::endl;
 

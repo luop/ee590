@@ -1,3 +1,4 @@
+#include <math.h>
 #include "parser.hh"
 
 Parser::Parser ( std::string str ) : tok(str) {
@@ -174,16 +175,32 @@ Number * Parser::expression() {
     if ( tok.current().matches('+') ){
       tok.eat_punctuation('+');
       o = term();
-      num = num + (o->get_val());
-      exponents = o->get_exp();
+      double t = o->get_val();
+      double e = o->get_exp();
+      if ( e < exponents ){
+        num = num + t / pow(10.0, (exponents - e));
+      }else if ( e > exponents ){
+        num = num/pow(10.0, (e - exponents)) + t;
+        exponents = e;
+      }else{
+        num = num + t;
+      }
       delete o;
     }
 
     if ( tok.current().matches('-') ){
       tok.eat_punctuation('-');
       o = term();
-      num = num - (o->get_val());
-      exponents = o->get_exp();
+      double t = o->get_val();
+      double e = o->get_exp();
+      if ( e < exponents ){
+        num = num - t / pow(10.0, (exponents - e));
+      }else if ( e > exponents ){
+        num = num/pow(10.0, (e - exponents)) - t;
+        exponents = e;
+      }else{
+        num = num - t;
+      }
       delete o;
     }
   }
@@ -204,7 +221,7 @@ Number * Parser::term() {
       tok.eat_punctuation('*');
       o = factor();
       num = num * (o->get_val());
-      exponents = o->get_exp();
+      exponents = exponents + (o->get_exp());
       delete o;
     }
 
@@ -212,12 +229,18 @@ Number * Parser::term() {
       tok.eat_punctuation('/');
       o = factor();
       double t = o->get_val();
+      double e = o->get_exp();
       if ( t != 0 ){
-        num = num / t;
+        if ( (t - (int) t == 0) && (num - (int) num == 0) ){
+          num = (double) ( (int) num / (int) t);
+        }else{
+          num = num / t;
+        }
+        exponents = exponents - e;
       }else{
         throw ParserException("invalid operands to divide by 0");
       }
-      exponents = o->get_exp();
+
       delete o;
     }
 
