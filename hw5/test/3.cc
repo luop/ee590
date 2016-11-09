@@ -14,6 +14,7 @@ int main ( int argc, char * argv[] ) {
   Parser n("[2*10e3,2E3*3E2,2E3*3E-2,2E3/3E2,2E3/3E-2,2E3+3E2,2E3-3E2,3E2+2E3,3E2-2E3,3E3+2E3,3E3-2E3]");
 
   std::cout << n.object()->stringify() << std::endl;
+  
 
   try {
     Parser q("[(1+1]");

@@ -1,23 +1,24 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "json.hh"
 
 int main ( int argc, char * argv[] ) {
 
-  Object * x = new Null;
+  std::ifstream inFile;
+  inFile.open("data.json");//open the input file
 
-  Hash h;
-  Number n(3.14159);
+  std::stringstream strStream;
+  strStream << inFile.rdbuf();//read the file
+  std::string str = strStream.str();//str holds the content of the file
 
-  std::cout << x->is_null() << std::endl;
+  Parser p(str);
 
-  h.set("first",  n);
-  h.set("second", n);
+  Object * object = p.object();
 
-  Array a = h.keys();
-  std::cout << a.stringify() << std::endl;
+  std::cout << object->stringify() << std::endl;
 
-  h.set("keys", a);
-  std::cout << h.stringify() << std::endl;
+  std::cout << (2+3)/2.0 << std::endl;
 
   return 0;
 
