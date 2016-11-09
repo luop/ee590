@@ -251,7 +251,7 @@ Number * Parser::term(bool unary_minus) {
       delete o;
       if ( t != 0 ){
         if ( integer && num_is_int ){
-          num = (double) ( (int) num / (int) t);
+          num = (int) num / (int) t;
         }else{
           num = num / t;
           num_is_int = false;
@@ -265,15 +265,16 @@ Number * Parser::term(bool unary_minus) {
     if ( tok.current().matches('%') && num_is_int ){
       tok.eat_punctuation('%');
       o = factor();
-      double t = o->get_val();
-      exponents = o->get_exp();
+      double t = (o->get_val()) * pow(10, (o->get_exp()));
       bool integer = o->is_int();
+      num = num * pow(10, exponents);
       delete o;
       if ( integer && t != 0){
         num = ( (int) num ) %  ( (int) t );
         if (num < 0){
           num = ((int) (t - abs ( num ))) % ( (int) t );
         }
+        exponents = 0;
       }else{
         throw ParserException("invalid operands to binary 'operator%'");
       }

@@ -11,7 +11,7 @@ int main ( int argc, char * argv[] ) {
 
   std::cout << m.object()->stringify() << std::endl;
 
-  Parser n("[2*10e3,2E3*3E2,2E3*3E-2,2E3/3E2,2E3/3E-2,2E3+3E2,2E3-3E2,3E2+2E3,3E2-2E3,3E3+2E3,3E3-2E3]");
+  Parser n("[2*10e3,2E3*3E2,2E3*3E-2,2E3/3E2,2E3/3E-2,2E3+3E2,2E3-3E2,3E2+2E3,3E2-2E3,3E3+2E3,3E3-2E3,2E3%3E2]");
 
   std::cout << n.object()->stringify() << std::endl;
   
