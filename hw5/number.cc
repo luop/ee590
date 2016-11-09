@@ -3,12 +3,12 @@
 Number::Number(double d) : value(d) {
 }
 
-Number::Number(double d, double e) : value(d), exponents(e) {
+Number::Number(double d, double e, bool b) : value(d), exponents(e), is_integer(b) {
 }
 
 std::string Number::stringify() {
   std::string s;
-  if ( value - (int) value == 0 ) {
+  if ( is_integer ) {
     s = std::to_string((int)value);
   } else {
     s = std::to_string(value);

@@ -29,7 +29,7 @@ private:
   Tokenizer tok;
   Number * factor();
   Number * expression();
-  Number * term();
+  Number * term(bool unary_minus);
 
 };
 

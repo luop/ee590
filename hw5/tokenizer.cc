@@ -88,12 +88,14 @@ Token Tokenizer::number() {
   std::string e("");
 
   bool exponents = false;
+  bool is_int = true;
 
   while ( is_num(buffer[i]) ) {
     s += buffer[i++];
   }
 
   if ( buffer[i] == '.' ) {
+    is_int = false;
     s += buffer[i++];
     while ( is_num(buffer[i]) ) {
       s += buffer[i++];
@@ -119,9 +121,9 @@ Token Tokenizer::number() {
   }
 
   if (exponents){
-    return Token(std::stod(s), std::stod(e));
+    return Token(std::stod(s), std::stod(e), is_int);
   }else{
-    return Token(std::stod(s));
+    return Token(std::stod(s), is_int);
   }
 }
 

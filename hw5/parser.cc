@@ -70,12 +70,6 @@ Object * Parser::number ( void ) {
   return n;
 }
 
-Object * Parser::exponents ( void ) {
-  Number * n = new Number(tok.current().number_val(), tok.current().exponents_val());
-  tok.eat();
-  return n;
-}
-
 Object * Parser::null ( void ) {
   tok.eat();
   return new Null;
@@ -127,17 +121,19 @@ Number * Parser::factor() {
   if ( tok.current().is_number() || tok.current().is_exponents() ) {
       double num = tok.current().number_val();
       double exponents = tok.current().exponents_val();
+      bool is_int = tok.current().is_int();
       tok.eat();
-      Number * n = new Number( num, exponents );
+      Number * n = new Number( num, exponents, is_int );
       return n;
   } else if ( tok.current().matches('(') ) {
       tok.eat_punctuation('(');
       Number * o = expression();
       double num = o->get_val();
       double exponents = o->get_exp();
+      bool is_int = tok.current().is_int();
       delete o;
       tok.eat_punctuation(')');
-      Number * n = new Number( num, exponents );
+      Number * n = new Number( num, exponents, is_int );
       return n;
   } else {
       throw ParserException("factor: syntax error");
@@ -149,72 +145,97 @@ Number * Parser::expression() {
 
   double num;
   double exponents;
+  bool num_is_int;
+
+  bool unary_minus = false;
 
   Number * o;
 
   if ( tok.current().matches('+') ){
     tok.eat_punctuation('+');
-    o = term();
+    o = term(unary_minus);
     num = o->get_val();
     exponents = o->get_exp();
+    num_is_int = o->is_int();
     delete o;
   }else if ( tok.current().matches('-') ){
     tok.eat_punctuation('-');
-    o = term();
-    num = (-1) * (o->get_val());
-    exponents = o->get_exp();
-    delete o;
-  }else{
-    o = term();
+    unary_minus = true;
+    o = term(unary_minus);
     num = o->get_val();
     exponents = o->get_exp();
+    num_is_int = o->is_int();
+    unary_minus = false;
+    delete o;
+  }else{
+    o = term(unary_minus);
+    num = o->get_val();
+    exponents = o->get_exp();
+    num_is_int = o->is_int();
     delete o;
   }
 
   while ( tok.current().matches('+') || tok.current().matches('-') ) {
     if ( tok.current().matches('+') ){
       tok.eat_punctuation('+');
-      o = term();
+      o = term(unary_minus);
       double t = o->get_val();
       double e = o->get_exp();
+      bool integer = o->is_int();
+      delete o;
       if ( e < exponents ){
         num = num + t / pow(10.0, (exponents - e));
+        num_is_int = false;
       }else if ( e > exponents ){
         num = num/pow(10.0, (e - exponents)) + t;
         exponents = e;
+        num_is_int = false;
       }else{
         num = num + t;
+        if ( !(integer) ){
+          num_is_int = false;
+        }
       }
-      delete o;
     }
 
     if ( tok.current().matches('-') ){
       tok.eat_punctuation('-');
-      o = term();
+      o = term(unary_minus);
       double t = o->get_val();
       double e = o->get_exp();
+      bool integer = o->is_int();
+      delete o;
       if ( e < exponents ){
         num = num - t / pow(10.0, (exponents - e));
+        num_is_int = false;
       }else if ( e > exponents ){
         num = num/pow(10.0, (e - exponents)) - t;
         exponents = e;
+        num_is_int = false;
       }else{
         num = num - t;
+        if ( !(integer) ){
+          num_is_int = false;
+        }
       }
-      delete o;
     }
   }
 
-  Number * n = new Number( num, exponents );
+  Number * n = new Number( num, exponents, num_is_int );
   return n;
 }
 
-Number * Parser::term() {
+Number * Parser::term(bool unary_minus) {
 
   Number * o = factor();
   double num = o->get_val();
   double exponents = o->get_exp();
+  bool num_is_int = o->is_int();
   delete o;
+
+  if (unary_minus){
+    num = (-1) * num;
+  }
 
   while ( tok.current().matches('*') || tok.current().matches('/') || tok.current().matches('%') ) {
     if ( tok.current().matches('*') ){
@@ -222,6 +243,7 @@ Number * Parser::term() {
       o = factor();
       num = num * (o->get_val());
       exponents = exponents + (o->get_exp());
+      num_is_int = o->is_int();
       delete o;
     }
 
@@ -230,38 +252,44 @@ Number * Parser::term() {
       o = factor();
       double t = o->get_val();
       double e = o->get_exp();
+      bool integer = o->is_int();
+      delete o;
       if ( t != 0 ){
-        if ( (t - (int) t == 0) && (num - (int) num == 0) ){
+        if ( integer && num_is_int ){
           num = (double) ( (int) num / (int) t);
         }else{
           num = num / t;
+          num_is_int = false;
         }
         exponents = exponents - e;
       }else{
         throw ParserException("invalid operands to divide by 0");
       }
-
-      delete o;
     }
 
-    if ( tok.current().matches('%') && (num - (int) num == 0) ){
+    if ( tok.current().matches('%') && num_is_int ){
       tok.eat_punctuation('%');
       o = factor();
       double t = o->get_val();
       exponents = o->get_exp();
+      bool integer = o->is_int();
       delete o;
-      if ( (t - (int) t == 0) && t != 0){
+      if ( integer && t != 0){
         num = ( (int) num ) %  ( (int) t );
+        if (num < 0){
+          num = ((int) (t - abs ( num ))) % ( (int) t );
+        }
+        num_is_int = true;
       }else{
         throw ParserException("invalid operands to binary 'operator%'");
       }
     }
 
-    if ( tok.current().matches('%') && (num - (int) num != 0) ){
+    if ( tok.current().matches('%') && !(num_is_int) ){
       throw ParserException("invalid operands to binary 'operator%'");
     }
   }
 
-  Number * n = new Number( num, exponents );
+  Number * n = new Number( num, exponents, num_is_int );
   return n;
 }

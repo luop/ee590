@@ -17,9 +17,9 @@ std::string Token::to_s ( void ) {
   case BOOLEAN:
     return boolean ? std::string("true") : std::string("false");
   case NUMBER:
-    return std::to_string(number);
+    return std::to_string(is_integer ? ((int) number) : number);
   case EXPONENTS:
-    return std::to_string(number) + "E" + std::to_string(exponents);
+    return std::to_string(is_integer ? ((int) number) : number) + "E" + std::to_string(exponents);
   case NULLTOK:
     return std::string("null");
   default:
