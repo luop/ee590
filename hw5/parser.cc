@@ -130,14 +130,13 @@ Number * Parser::factor() {
       Number * o = expression();
       double num = o->get_val();
       double exponents = o->get_exp();
-      bool is_int = tok.current().is_int();
+      bool is_int = o->is_int();
       delete o;
       tok.eat_punctuation(')');
       Number * n = new Number( num, exponents, is_int );
       return n;
   } else {
       throw ParserException("factor: syntax error");
-      //nextsym();
   }
 }
 
@@ -192,9 +191,7 @@ Number * Parser::expression() {
         num_is_int = false;
       }else{
         num = num + t;
-        if ( !(integer) ){
-          num_is_int = false;
-        }
+        num_is_int = integer;
       }
     }
 
@@ -214,9 +211,7 @@ Number * Parser::expression() {
         num_is_int = false;
       }else{
         num = num - t;
-        if ( !(integer) ){
-          num_is_int = false;
-        }
+        num_is_int = integer;
       }
     }
   }
@@ -279,7 +274,6 @@ Number * Parser::term(bool unary_minus) {
         if (num < 0){
           num = ((int) (t - abs ( num ))) % ( (int) t );
         }
-        num_is_int = true;
       }else{
         throw ParserException("invalid operands to binary 'operator%'");
       }
