@@ -272,7 +272,7 @@ Number * Parser::term(bool unary_minus) {
       if ( integer && t != 0){
         num = ( (int) num ) %  ( (int) t );
         if (num < 0){
-          num = ((int) (t - abs ( num ))) % ( (int) t );
+          num = ((int) (t - std::abs ( (int) num ))) % ( (int) t );
         }
         exponents = 0;
       }else{
