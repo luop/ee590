@@ -31,7 +31,7 @@ Tokenizer.prototype.tokenize = function(str) {
 
 Tokenizer.prototype.current = function() {
   // TODO: Return current token
-  if ( i == 0 ) {
+  if ( this.i == 0 ) {
     this.current_token = this.next();
   }
 
