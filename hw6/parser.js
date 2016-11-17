@@ -14,9 +14,9 @@ function Parser(str) {
       .add(/-/) // Add tokens here
       .add(/\(/)
       .add(/\)/)
-      .add(/\d+(?!\.)/)
-      .add(/\.\d+/)
-      .add(/\d+\.\d*/)
+      .add(/\d+(?!\.)([eE][-+]?\d+)?/)
+      .add(/\.\d+([eE][-+]?\d+)?/)
+      .add(/\d+\.\d*([eE][-+]?\d+)?/)
       .add(/\*/)
       .add(/\//)
       .add(/%/);
