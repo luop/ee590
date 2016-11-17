@@ -33,11 +33,9 @@ Parser.prototype.factor = function() {
       this.tokenizer.eat();
       return num;
   } else if ( this.tokenizer.current() == '(' ) {
-      //this.position = (this.str).indexOf('(', this.position) + 1;
       this.tokenizer.eat();
       var num = this.exr();
       if ( this.tokenizer.current() == ')' ){
-        //this.position = (this.str).indexOf(')', this.position) + 1;
         this.tokenizer.eat();
         return num;
       }else{
@@ -50,25 +48,39 @@ Parser.prototype.factor = function() {
   }
 }
 
-Parser.prototype.term = function(unary_minus) {
-  // TODO
-  var num = this.factor();
+Parser.prototype.unary = function() {
+  var num = 0;
 
-  if (unary_minus){
-    num = (-1) * num;
+  if ( this.tokenizer.current() == '+' ){
+    this.position = (this.str).indexOf('+', this.position);
+    this.tokenizer.eat();
+    num = this.factor();
+  }else if ( this.tokenizer.current() == '-' ){
+    this.position = (this.str).indexOf('-', this.position);
+    this.tokenizer.eat();
+    num = (-1) * this.factor();
+  }else{
+    num = this.factor();
   }
+
+  return num;
+}
+
+Parser.prototype.term = function() {
+  // TODO
+  var num = this.unary();
 
   while ( this.tokenizer.current() == '*' || this.tokenizer.current() == '/' || this.tokenizer.current() == '%' ) {
     if ( this.tokenizer.current() == '*' ){
       this.position = (this.str).indexOf('*', this.position);
       this.tokenizer.eat();
-      num = num * this.factor();
+      num = num * this.unary();
     }
 
     if ( this.tokenizer.current() == '/' ){
       this.position = (this.str).indexOf('/', this.position);
       this.tokenizer.eat();
-      var t = this.factor();
+      var t = this.unary();
       if ( t != 0 ){
         num = num / t;
       }else{
@@ -79,7 +91,7 @@ Parser.prototype.term = function(unary_minus) {
     if ( this.tokenizer.current() == '%' ){
       this.position = (this.str).indexOf('%', this.position);
       this.tokenizer.eat();
-      var t = this.factor();
+      var t = this.unary();
       if ( t != 0 ){
         num = num % t;
         if (num < 0){
@@ -97,33 +109,28 @@ Parser.prototype.term = function(unary_minus) {
 Parser.prototype.exr = function() {
   // TODO
   var num = 0;
-  var unary_minus = false;
 
   if ( this.tokenizer.current() == '+' ){
     this.position = (this.str).indexOf('+', this.position);
-    this.tokenizer.eat();
-    num = this.term(unary_minus);
+    num = this.term();
   }else if ( this.tokenizer.current() == '-' ){
     this.position = (this.str).indexOf('-', this.position);
-    this.tokenizer.eat();
-    unary_minus = true;
-    num = this.term(unary_minus);
-    unary_minus = false;
+    num = this.term();
   }else{
-    num = this.term(unary_minus);
+    num = this.term();
   }
 
   while ( this.tokenizer.current() == '+' || this.tokenizer.current() == '-' ) {
     if ( this.tokenizer.current() == '+' ){
       this.position = (this.str).indexOf('+', this.position);
       this.tokenizer.eat();
-      num = num + this.term(unary_minus);
+      num = num + this.term();
     }
 
     if ( this.tokenizer.current() == '-' ){
       this.position = (this.str).indexOf('-', this.position);
       this.tokenizer.eat();
-      num = num - this.term(unary_minus);
+      num = num - this.term();
     }
   }
 
