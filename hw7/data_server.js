@@ -1,5 +1,4 @@
 let jnet = require('./json_net');
-//let Stack = require("./stack")
 
 let server = new jnet.JSONServer();
 
@@ -13,7 +12,6 @@ server.on('json_connection',function(jsocket) {
   var responses = {
 
     put: function(object) {
-      //server.stack.push({ address: { object.key: {value: object.value, timestamp: object.timestamp, received: Math.floor(new Date() / 1000) }});
       var valid = true;
       var errMsg = "";
 
@@ -59,8 +57,42 @@ server.on('json_connection',function(jsocket) {
     },
 
     get: function(object) {
-      //jsocket.jwrite({value: server.stack.pop()});
-      jsocket.jwrite({ result: "ok"});
+      if( !(object.hasOwnProperty('key')) && !(object.hasOwnProperty('host')) ){
+        let count = 0;
+        for(var objKey in object) {
+          count ++;
+        }
+        if (count == 1){
+          jsocket.jwrite({ result: server.data});
+        }else{
+          jsocket.error("the command is not well formed");
+        }
+      }else if( object.hasOwnProperty('key') && !(object.hasOwnProperty('host'))){
+        let key_type = typeof (object.key);
+        if ( key_type == 'string' ){
+          if ( server.data[address].hasOwnProperty(object.key) ){
+            jsocket.jwrite({ result: server.data[address][object.key]});
+          }else{
+            jsocket.error(object.key + " cannot be found");
+          }
+        }else{
+          jsocket.error("the key is not a string");
+        }
+      }else if( object.hasOwnProperty('key') && object.hasOwnProperty('host') ){
+        let key_type = typeof (object.key);
+        let host_type = typeof (object.host);
+        if ( key_type == 'string' && host_type == 'string' ){
+          if ( server.data.hasOwnProperty(object.host) && server.data[object.host].hasOwnProperty(object.key)){
+            jsocket.jwrite({ result: server.data[object.host][object.key]});
+          }else{
+            jsocket.error("data cannot be found");
+          }
+        }else{
+          jsocket.error("the key or the host is not a string");
+        }
+      }else{
+        jsocket.error("the command is not well formed");
+      }
     },
 
     ee590: function(object) {
