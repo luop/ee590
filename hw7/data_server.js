@@ -14,7 +14,48 @@ server.on('json_connection',function(jsocket) {
 
     put: function(object) {
       //server.stack.push({ address: { object.key: {value: object.value, timestamp: object.timestamp, received: Math.floor(new Date() / 1000) }});
-      jsocket.jwrite({ result: "ok"});
+      var valid = true;
+      var errMsg = "";
+
+      if( !(object.hasOwnProperty('key')) ){
+        valid = false;
+        errMsg += "key is missing in data. ";
+      }else{
+        let type = typeof (object.key);
+        if ( type != 'string' ){
+          valid = false;
+          errMsg += "key is not a string. ";
+        }
+      }
+
+      if( !(object.hasOwnProperty('value')) ){
+        valid = false;
+        errMsg += "value is missing in data. ";
+      }else{
+        let type = typeof (object.value);
+        if ( type != 'string' && type != 'boolean' && type != 'number' ){
+          valid = false;
+          errMsg += "value needs to be STRING|NUMBER|BOOLEAN. ";
+        }
+      }
+
+      if( !(object.hasOwnProperty('timestamp')) ){
+        valid = false;
+        errMsg += "timestamp is missing in data.";
+      }else{
+        let type = typeof (object.timestamp);
+        if ( type != 'number' || (object.timestamp) < 0 || (object.timestamp) % 1 != 0){
+          valid = false;
+          errMsg += "timestamp is not a positive integer.";
+        }
+      }
+
+      if ( valid ){
+        server.data[address][object.key] = {value: object.value, timestamp: object.timestamp, received: Math.floor(new Date() / 1000) };
+        jsocket.jwrite({ result: "ok"});
+      }else{
+        jsocket.error(errMsg);
+      }
     },
 
     get: function(object) {
@@ -25,7 +66,7 @@ server.on('json_connection',function(jsocket) {
     ee590: function(object) {
       console.log(address);
       if( !(server.data.hasOwnProperty(address)) ){
-          server.data[address] = 'ACT';
+          server.data[address] = {};
       }
       jsocket.jwrite({ result: "ok"});
     },
