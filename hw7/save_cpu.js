@@ -19,6 +19,11 @@ function test_connection() {
     p_total += cpu.times.user / total;
   }
 
+  var address = client.address().address;
+  if (address.substr(0, 7) == "::ffff:") {
+    address = address.substr(7)
+  }
+
   setTimeout(function() {
     client.jwrite({ command: "ee590"});
     setTimeout(function() {
@@ -28,7 +33,7 @@ function test_connection() {
         setTimeout(function() {
           client.jwrite({ command: "get", key: "cpu load"});
           setTimeout(function() {
-            client.jwrite({ command: "get", key: "cpu load", host: '::ffff:127.0.0.1' });
+            client.jwrite({ command: "get", key: "cpu load", host: address });
             setTimeout(function() {
               client.jwrite({ command: "end"});
             }, 1000);
@@ -37,12 +42,6 @@ function test_connection() {
       }, 1000);
     }, 1000);
   }, 1000);
-  //client.jwrite({ command: "ee590"});
-  //client.jwrite({ command: "put", key: "cpu load", value: Math.round(100 * p_total/len), timestamp: Math.floor(new Date() / 1000)});
-  //client.jwrite({ command: "get"});
-  //client.jwrite({ command: "get", key: "cpu load"});
-  //client.jwrite({ command: "get", key: "cpu load", host: process.argv[2] });
-  //client.jwrite({ command: "end"});
 }
 
 client.on('connect', function() {

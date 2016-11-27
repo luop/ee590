@@ -7,6 +7,9 @@ server.data = {};
 server.on('json_connection',function(jsocket) {
 
   var address = jsocket.address().address;
+  if (address.substr(0, 7) == "::ffff:") {
+    address = address.substr(7)
+  }
   console.log(address);
 
   var responses = {
