@@ -6,11 +6,10 @@ server.data = {};
 
 server.on('json_connection',function(jsocket) {
 
-  var address = jsocket.address().address;
+  var address = jsocket.remoteAddress;
   if (address.substr(0, 7) == "::ffff:") {
     address = address.substr(7)
   }
-  console.log(address);
 
   var responses = {
 
@@ -99,7 +98,6 @@ server.on('json_connection',function(jsocket) {
     },
 
     ee590: function(object) {
-      console.log(address);
       if( !(server.data.hasOwnProperty(address)) ){
           server.data[address] = {};
       }
