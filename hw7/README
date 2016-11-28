@@ -1,0 +1,16 @@
+The IP address of my AWS instance is 54.191.187.216
+
+C:\Users\Luo\Documents\EE590A\hw7>node save_cpu.js 54.191.187.216 8080
+54.191.187.216
+{"result":"ok"}
+{"result":"ok"}
+{"result":{"98.247.152.140":{"cpu load":{"value":7,"timestamp":1480314077,"received":1480314079}}}}
+{"result":{"value":7,"timestamp":1480314077,"received":1480314079}}
+{"error":"data cannot be found"}
+
+C:\Users\Luo\Documents\EE590A\hw7>node save_cpu.js localhost 8080
+{"result":"ok"}
+{"result":"ok"}
+{"result":{"127.0.0.1":{"cpu load":{"value":"7%","timestamp":1480314296,"received":1480314296}}}}
+{"result":{"value":"7%","timestamp":1480314296,"received":1480314296}}
+{"result":{"value":"7%","timestamp":1480314296,"received":1480314296}}

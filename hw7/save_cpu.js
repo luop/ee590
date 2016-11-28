@@ -27,7 +27,7 @@ function test_connection() {
   setTimeout(function() {
     client.jwrite({ command: "ee590"});
     setTimeout(function() {
-      client.jwrite({ command: "put", key: "cpu load", value: Math.round(100 * p_total/len), timestamp: Math.floor(new Date() / 1000)});
+      client.jwrite({ command: "put", key: "cpu load", value: Math.round(100 * p_total/len) + '%', timestamp: Math.floor(new Date() / 1000)});
       setTimeout(function() {
         client.jwrite({ command: "get"});
         setTimeout(function() {

@@ -8,7 +8,7 @@ server.on('json_connection',function(jsocket) {
 
   var address = jsocket.remoteAddress;
   if (address.substr(0, 7) == "::ffff:") {
-    address = address.substr(7)
+    address = address.substr(7);
   }
 
   var responses = {
@@ -125,8 +125,6 @@ server.on('json_connection',function(jsocket) {
     } else {
       jsocket.error("Unknown command '" + object.command + "'");
     }
-
-    console.log(server.data);
 
   });
 
