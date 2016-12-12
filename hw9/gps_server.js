@@ -2,6 +2,10 @@ let jnet = require('./json_net');
 
 let server = new jnet.JSONServer();
 
+let sqlite3 = require('sqlite3').verbose();
+let dbFile = "gpsdata.sqlite";
+let db = new sqlite3.Database(dbFile);
+
 server.data = {};
 
 server.on('json_connection',function(jsocket) {
@@ -89,11 +93,25 @@ server.on('json_connection',function(jsocket) {
       }
     },
 
-    register: function(object) {
-      if( !(server.data.hasOwnProperty('username')) ){
-          server.data[object.username] = {};
+    login: function(object) {
+      if( object.hasOwnProperty('username') ){
+        db.all("SELECT * FROM user where Username = ?", object.username, function(err, rows) {
+          rows.forEach(function (row) {
+            console.log(row.Username);
+          })
+          if ( rows == 0 ) {
+            var stmt = db.prepare("INSERT INTO user(Username, Password) VALUES(?,?)");
+            stmt.run(object.username, "password");
+            stmt.finalize();
+          }
+        });
+        if( !(server.data.hasOwnProperty('username')) ){
+            server.data[object.username] = {};
+        }
+        jsocket.jwrite({ result: "Logged in"});
+      }else{
+        jsocket.error("username is missing");
       }
-      jsocket.jwrite({ result: "registered"});
     },
 
     end: function(object,socket) {
@@ -105,7 +123,7 @@ server.on('json_connection',function(jsocket) {
   jsocket.on('json', function(object) {
 
     if ( responses[object.command] ) {
-      if (object.command != 'register' && object.command != 'end'){
+      if (object.command != 'login' && object.command != 'end'){
         if( server.data.hasOwnProperty(object.username) ){
             responses[object.command](object);
         }else{
