@@ -82,7 +82,7 @@ server.on('json_connection',function(jsocket) {
         let stmt = db.prepare(query);
         stmt.run(object.latitude, object.longitude, object.altitude, object.timestamp, rectime, object.username);
         stmt.finalize();
-        db.close()
+        db.close();
         server.data[object.username] = {latitude: object.latitude, longitude: object.longitude, altitude: object.altitude, timestamp: object.timestamp, received: rectime };
         jsocket.jwrite({ put: server.data[object.username]});
         console.log(server.data);
@@ -95,7 +95,20 @@ server.on('json_connection',function(jsocket) {
       if( object.hasOwnProperty('username') ){
         let key_type = typeof (object.username);
         if ( key_type == 'string' ){
-          jsocket.jwrite({ result: server.data[object.username]});
+          let query = "select Latitude, Longitude, Altitude, SentTime, ReceiveTime\
+                      from Gpsdata inner join User on Gpsdata.UserId = User.UserId\
+                      where User.Username = ?";
+          let db = new sqlite3.Database(dbFile);
+          var queryResult = {};
+          var count = 1;
+          db.each(query, object.username, function(err, row) {
+            console.log(row.Latitude, row.Longitude, row.Altitude, row.SentTime, row.ReceiveTime);
+            queryResult[count.toString()] = {latitude: row.Latitude, longitude: row.Longitude, altitude: row.Altitude, timestamp: row.SentTime, received: row.ReceiveTime };
+            count ++;
+          }, function(err, rows){
+              jsocket.jwrite({ result: queryResult});
+          });
+          db.close();
         }else{
           jsocket.error("the username is not a string");
         }
