@@ -4,7 +4,6 @@ let server = new jnet.JSONServer();
 
 let sqlite3 = require('sqlite3').verbose();
 let dbFile = "gpsdata.sqlite";
-let db = new sqlite3.Database(dbFile);
 
 server.data = {};
 
@@ -72,7 +71,19 @@ server.on('json_connection',function(jsocket) {
       }
 
       if ( valid ){
-        server.data[object.username] = {latitude: object.latitude, longitude: object.longitude, altitude: object.altitude, timestamp: object.timestamp, received: Math.floor(new Date() / 1000) };
+        let query = "INSERT INTO Gpsdata \
+                    (Latitude, Longitude, Altitude, SentTime, ReceiveTime, UserId) \
+                    VALUES (?, ?, ?, ?, ?,\
+                    (SELECT UserId \
+                      FROM User\
+                      WHERE User.Username = ?))";
+        let rectime = Math.floor(new Date() / 1000);
+        let db = new sqlite3.Database(dbFile);
+        let stmt = db.prepare(query);
+        stmt.run(object.latitude, object.longitude, object.altitude, object.timestamp, rectime, object.username);
+        stmt.finalize();
+        db.close()
+        server.data[object.username] = {latitude: object.latitude, longitude: object.longitude, altitude: object.altitude, timestamp: object.timestamp, received: rectime };
         jsocket.jwrite({ put: server.data[object.username]});
         console.log(server.data);
       }else{
@@ -95,6 +106,7 @@ server.on('json_connection',function(jsocket) {
 
     login: function(object) {
       if( object.hasOwnProperty('username') ){
+        let db = new sqlite3.Database(dbFile);
         db.all("SELECT * FROM user where Username = ?", object.username, function(err, rows) {
           rows.forEach(function (row) {
             console.log(row.Username);
@@ -105,6 +117,7 @@ server.on('json_connection',function(jsocket) {
             stmt.finalize();
           }
         });
+        db.close();
         if( !(server.data.hasOwnProperty('username')) ){
             server.data[object.username] = {};
         }
