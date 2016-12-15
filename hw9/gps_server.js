@@ -121,20 +121,24 @@ server.on('json_connection',function(jsocket) {
       if( object.hasOwnProperty('username') ){
         let db = new sqlite3.Database(dbFile);
         db.all("SELECT * FROM user where Username = ?", object.username, function(err, rows) {
+          var login = false;
           rows.forEach(function (row) {
-            console.log(row.Username);
+            login = (row.Password == object.password);
           })
-          if ( rows == 0 ) {
+          if ( rows.length == 0 && object.hasOwnProperty('password') && typeof (object.password) == 'string') {
             var stmt = db.prepare("INSERT INTO user(Username, Password) VALUES(?,?)");
-            stmt.run(object.username, "password");
+            stmt.run(object.username, object.password);
             stmt.finalize();
+            login = true;
+          }
+          if( !(server.data.hasOwnProperty('username')) && login ){
+            server.data[object.username] = {};
+            jsocket.jwrite({ result: "Logged in"});
+          }else{
+            jsocket.error({ result: "Invalid user name or password"});
           }
         });
         db.close();
-        if( !(server.data.hasOwnProperty('username')) ){
-            server.data[object.username] = {};
-        }
-        jsocket.jwrite({ result: "Logged in"});
       }else{
         jsocket.error("username is missing");
       }

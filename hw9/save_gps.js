@@ -8,7 +8,7 @@ function send(counter) {
   setTimeout(function() {
 
     if ( counter == 0 ) {
-      client.jwrite({ command: "login", username: process.argv[4] }, send(++counter));
+      client.jwrite({ command: "login", username: process.argv[4], password: process.argv[5] }, send(++counter));
     }else if ( counter == 4) {
       client.jwrite({ command: "end"});
     }else if ( counter == 3){
@@ -40,7 +40,7 @@ client.on('error', (err) => {
   throw err;
 });
 
-if ( process.argv.length == 5 ){
+if ( process.argv.length == 6 ){
   let hostname = process.argv[2];
   let port = process.argv[3];
   client.connect(port, hostname);
