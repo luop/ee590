@@ -100,11 +100,9 @@ server.on('json_connection',function(jsocket) {
                       where User.Username = ?";
           let db = new sqlite3.Database(dbFile);
           var queryResult = {};
-          var count = 1;
           db.each(query, object.username, function(err, row) {
             console.log(row.Latitude, row.Longitude, row.Altitude, row.SentTime, row.ReceiveTime);
-            queryResult[count.toString()] = {latitude: row.Latitude, longitude: row.Longitude, altitude: row.Altitude, timestamp: row.SentTime, received: row.ReceiveTime };
-            count ++;
+            queryResult["Timestamp: " + row.SentTime] = {latitude: row.Latitude, longitude: row.Longitude, altitude: row.Altitude, received: row.ReceiveTime };
           }, function(err, rows){
               jsocket.jwrite({ result: queryResult});
           });
